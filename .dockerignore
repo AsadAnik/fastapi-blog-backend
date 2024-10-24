@@ -1,0 +1,40 @@
+# Ignore Python virtual environments
+env/
+venv/
+
+# Ignore Python cache files
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Ignore local environment files
+*.env
+*.env.local
+*.env.docker
+
+# Ignore logs and temporary files
+*.log
+*.sqlite3
+*.pot
+
+# Ignore unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+coverage.xml
+*.cover
+.cache
+pytest_cache/
+nosetests.xml
+coverage/
+*.py,cover
+
+# Ignore macOS and editor-specific files
+.DS_Store
+.vscode/
+.idea/
+
+# Ignore local Docker files
+docker-compose.override.yml

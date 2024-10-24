@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+*.env
+*.env.local
+
+# Byte-compiled files
+*.pyc
+
+# Logs and databases
+*.log
+*.sqlite3
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+coverage.xml
+*.cover
+*.py,cover
+.cache
+pytest_cache/
+nosetests.xml
+coverage/
+*.pot
+
+# macOS
+.DS_Store
+
+# Editor-specific (VS Code, etc.)
+.vscode/
+.idea/
+
+# Jupyter Notebooks
+.ipynb_checkpoints
+
+# Docker
+*.env.docker
+docker-compose.override.yml
