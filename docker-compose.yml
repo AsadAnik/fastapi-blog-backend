@@ -1,0 +1,53 @@
+version: '3.8'
+services:
+  # region DATABASE
+  postgres:
+    image: postgres:13
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: fastapi_blog_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - fastapi_blog_network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # region APPLICATION
+  fastapi_app:
+    build:
+      context: .  # Point to the root context where Dockerfile is located
+      dockerfile: Dockerfile  # Use the Dockerfile from the root
+    container_name: fastapi_blog_app
+#    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload  # Ensure it's app.main because of the directory structure
+    command: [ "./wait-for-it.sh", "postgres:5432", "--", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000" ]
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://postgres:password@postgres:5432/fastapi_blog_db
+    depends_on:
+      postgres:
+        condition: service_healthy
+#    entrypoint: [ "./wait-for-it.sh", "postgres:5432", "--", "uvicorn", "app.main:app", "--reload", "--host", "0.0.0.0", "--port", "8000" ]
+    networks:
+      - fastapi_blog_network
+    volumes:
+      - .:/app  # Mount the root directory to /app in the container
+
+# region NETWORKS
+networks:
+  fastapi_blog_network:
+    driver: bridge
+
+# region VOLUMES
+volumes:
+  postgres_data:
