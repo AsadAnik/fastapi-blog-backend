@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.db.session import SessionLocal
-from app.db.models.item import Item as ItemModel
 from app.schemas.item import ItemCreate, Item
+from app.services.item_service import ItemService
 
 # Create a new FastAPI router
 router = APIRouter()
@@ -18,16 +18,13 @@ def get_db():
 # Define a route to create a new item
 @router.post("/items", response_model=Item)
 def create_item(item: ItemCreate, db: Session = Depends(get_db)):
-    db_item = ItemModel(**item.dict())
-    db.add(db_item)
-    db.commit()
-    db.refresh(db_item)
-    return db_item
+    return ItemService.get_all_items(item, db)
+
 
 # Define a route to get all items
 @router.get("/items", response_model=Item)
 def read_items(db: Session = Depends(get_db)):
-    items = db.query(ItemModel).all()
+    items = ItemService.get_all_items(db)
     if not items:
         raise HTTPException(status_code=404, detail="No items found")
     return items
