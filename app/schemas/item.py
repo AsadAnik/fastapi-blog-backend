@@ -8,6 +8,12 @@ class ItemBase(BaseModel):
 class ItemCreate(ItemBase):
     pass
 
+class ItemUpdate(ItemBase):
+    id: int
+
+class ItemDelete(BaseModel):
+    id: int
+
 class Item(ItemBase):
     id: int
 
